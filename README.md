@@ -37,8 +37,14 @@ In this project I tried to solve this clients problem.
 4. Form Component (same component is used to edit existing bill).
 5. Print Component.
 
-**How to start the project**
+**Services**
+1. login Service.
+2. Bill Service.
 
+**Route Guard**
+1. Auth Guard (CanActivate).
+
+**How to start the project**
 1. Run Json-server
 2. Run Development server
 
