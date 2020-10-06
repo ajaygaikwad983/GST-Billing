@@ -1,0 +1,2 @@
+Step 1:		json-server --watch data.json
+Step 2:		ng s -o

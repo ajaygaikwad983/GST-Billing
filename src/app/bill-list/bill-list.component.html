@@ -1,0 +1,31 @@
+<app-menu></app-menu>
+<div class="container">
+  <div>
+    <button class="btn btn-primary add-bill" (click)='addBillClick()' type="button"> + Add Bill</button>
+  </div>
+  <br>
+  <table class="table table-hover table-striped auto-index">
+    <thead class="bg-dark text-white">
+      <tr>
+        <th>sr. no.</th>
+        <th>Bill No.</th>
+        <th>Name of Consumer</th>
+        <th>date</th>
+        <th>Show Bill</th>
+        <th>Edit</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let list of Records; let i=index; trackBy: trackByBillNo">
+        <td width="10%">{{i+1}}</td>
+        <td width="10%">{{list.BillNo}}</td>
+        <td width="35%">{{list.ConsumerName}}</td>
+        <td width="10%">{{list.BillNoDate | date: 'dd/MM/yyyy'}}</td>
+        <td width="15%"><button class="btn btn-success" type="button" (click)="showBill(list.BillNo)">Show</button></td>
+        <td width="10%"><button class="btn btn-primary" type="button" (click)="editBill(list.id)">Edit</button></td>
+        <td widht="10%"><button class="btn btn-danger" type="button" (click)="deleteBill(list.id)">Delete</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

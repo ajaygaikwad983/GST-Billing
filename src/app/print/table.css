@@ -1,0 +1,25 @@
+.print {
+  width: 900px;
+  margin: auto;
+}
+table {
+	border: 1px solid black;
+  border-collapse: collapse;
+  font-weight: bold;
+}
+tr {
+	border: 1px solid black;
+}
+td {
+	border: 1px solid black;
+}
+.title {
+  text-align: center;
+  font-size: 2em;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+.CusName {
+  border-bottom: 1px solid black;
+}
+

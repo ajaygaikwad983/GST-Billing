@@ -1,0 +1,22 @@
+.section {
+    padding: 25px 0;
+}
+.card {
+    width: 400px;
+    margin: auto;
+    background-color: rgba(0, 0, 0, 0.479);
+    color: white;
+}
+.btn {
+    float: right;
+}
+.title {
+    letter-spacing: 2px;
+    font-weight: 300;
+    text-align: right;
+}
+.top_bar{background:#f26522}
+.main {
+    background-image: linear-gradient(rgba(212, 201, 201, 0.336),rgb(238, 151, 93));
+    height: 625px;
+}

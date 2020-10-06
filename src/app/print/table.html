@@ -1,0 +1,133 @@
+<app-menu></app-menu>
+<div class="print">
+	<div>
+		<div>
+			<table class="table" width="100%">
+				<tr>
+					<td colspan="3">
+						<div class="row">
+							<div class="col-6" style="border-right: 1px solid black;">
+								<img src="../../assets/logo.png" alt="" width="300px" height="100px">
+							</div>
+							<div class="col-6">
+								<h6>Address of the company,</h6>
+								<h6>City.</h6>
+								<h6>Tel. : 1234567890</h6>
+								<h6>E-mail : test@gmail.com</h6>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" style="padding: 0px;">
+						<p class="title">INVOICE</p>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3">
+						<div class="row">
+							<div class="col-5" style="border-right: 1px solid black;">
+								<p>To,</p>
+								<p class="CusName">{{consumer[0].ConsumerName}}</p>
+								<p class="CusName">{{consumer[0].ConsumerCity}}.</p>
+								<p>GSTN {{consumer[0].ConsumerGST}}</p>
+							</div>
+							<div class="col-7">
+								<table class="table" style="border: none;">
+									<tr style="border: none;">
+										<td style="border: none;">Bill No. : {{(consumer[0].BillNo)?consumer[0].BillNo:''}}</td>
+										<td style="border: none;">Date: {{consumer[0].BillNoDate | date: 'dd/MM/yyyy'}}</td>
+									</tr>
+									<tr style="border: none;">
+										<td style="border: none;">D.C. No. : {{(consumer[0].DCNo)?consumer[0].DCNo:''}}</td>
+										<td style="border: none;">Date: {{consumer[0].DCDate | date: 'dd/MM/yyyy'}}</td>
+									</tr>
+									<tr style="border: none;">
+										<td style="border: none;">P.O. No. : {{(consumer[0].PONo)?consumer[0].PONo:''}}</td>
+										<td style="border: none;">Date: {{consumer[0].PODate | date: 'dd/MM/yyyy'}}</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" style="padding: 0;">
+						<table class="table" id="content">
+							<thead>
+								<tr class="bg-dark text-white">
+									<th>sr.no.</th>
+									<th>Description</th>
+									<th>HSN Code</th>
+									<th>Sqft./ Size</th>
+									<th>Qty.</th>
+									<th>Rate Per</th>
+									<th>Amount (in Rs.)</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr *ngFor="let product of consumer[0].Products; let i=index">
+									<td>{{i+1}}.</td>
+									<td>{{(product.ProductName==null || product.ProductName=='')?'-':product.ProductName}}</td>
+									<td>{{(product.HSNCode==null || product.HSNCode=='')?'-':product.HSNCode}}</td>
+									<td>{{(product.Size==null || product.Size=='')?'-':product.Size}}</td>
+									<td>{{(product.Qty==null || product.Qty=='')?'-':product.Qty}}</td>
+									<td>{{(product.RatePer==null || product.RatePer=='')?'-':product.RatePer| currency: 'INR'}}</td>
+									<td><span>&#8377;</span> {{(product.Amount==null || product.Amount=='')?'-':product.Amount}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+					<p>Rs. in words : {{this.word}} Rupees</p>
+					</td>
+					<td style="padding: 0px;" colspan="1">
+						<table class="table table-sm">
+							<tbody>
+								<tr>
+									<td>TOTAL</td>
+									<td><span>&#8377;</span> {{consumer[0].Total}}</td>
+								</tr>
+								<tr>
+									<td>CGST {{this.consumer[0].CGSTP}}%</td>
+									<td><span>&#8377;</span> {{consumer[0].CGST}}</td>
+								</tr>
+								<tr>
+									<td>SGST {{this.consumer[0].SGSTP}}%</td>
+									<td><span>&#8377;</span> {{consumer[0].SGST}}</td>
+								</tr>
+								<tr>
+									<td>G TOTAL</td>
+									<td><span>&#8377;</span> {{consumer[0].GrandTotal}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="1" width="34%">
+						<p>Bank Details</p>
+						<pre>
+	Bank name     :***
+	Branch        :***
+	A/C. No.      :***
+	IFSC Code     :***
+			</pre>
+					</td>
+					<td colspan="1" width="33%">
+						<p>GSTN ***</p>
+					</td>
+					<td colspan="1" width="50%">
+						<p>For</p>
+						<img src="../../assets/logo.png" class="lastLogo" alt="" width="300px" height="100px">
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<button type="button" class="btn btn-primary" (click)="print()">Print</button>
+	<button type="button" class="btn btn-danger ml-3" (click)="navigateToList()">Cancel</button>
+</div>
+<br>

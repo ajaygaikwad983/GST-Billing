@@ -1,0 +1,184 @@
+<app-menu></app-menu>
+<div class="card panel">
+	<div class="card-header bg-secondary text-white"><h4 class="card-title">{{title}}</h4></div>
+	<form [formGroup]="frmConsumer" (ngSubmit)="onSubmit()">
+		<div class="card-body">
+			<div class="form-group">
+				<label class="label">Invoice To</label>
+				<div class="row">
+					<div class="col-md-6">
+						<div>
+							<input type="text" formControlName="Name" class="form-control" [matAutocomplete]="auto" [ngClass]="{'is-invalid':this.frmConsumer.get('Name').touched && this.frmConsumer.get('Name').invalid}" name="name" id="name" placeholder="Company Name">
+							<span class="help-block text-danger" *ngIf="this.frmConsumer.get('Name').touched && this.frmConsumer.get('Name').invalid">Company name is required</span>
+							<mat-autocomplete #auto="matAutocomplete">
+								<mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+									{{option}}
+								</mat-option>
+							</mat-autocomplete>
+						</div>
+						<input type="text" formControlName="GSTNo" class="form-control mt-3" name="GSTNo" id="GSTNo" placeholder="GST NO.">
+					</div>
+					<div class="col-md-6">
+						<div>
+							<input type="text" formControlName="City" class="form-control" [ngClass]="{'is-invalid':this.frmConsumer.get('City').touched && this.frmConsumer.get('City').invalid}" name="city" id="city" placeholder="Address">
+							<span class="help-block text-danger" *ngIf="this.frmConsumer.get('City').touched && this.frmConsumer.get('City').invalid">Address is required</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group mt-3">
+				<label class="label">Invoice Details</label>
+				<div class="row">
+					<div class="col-md-6">
+						<div>
+							<input type="number" formControlName="Billno" class="form-control w-50" name="billNo" id="billNo" placeholder="Bill No" [ngClass]="{'is-invalid':this.frmConsumer.get('Billno').touched && this.frmConsumer.get('Billno').invalid}">
+							<span class="help-block text-danger" *ngIf="this.frmConsumer.get('Billno').touched && this.frmConsumer.get('Billno').invalid">Bill number is required</span>
+						</div>
+						<input type="text" formControlName="DCno" class="form-control w-50 mt-3" name="DCno" id="DCno" placeholder="D.C. No">
+						<input type="text" formControlName="POno" class="form-control w-50 mt-3" name="POno" id="POno" placeholder="P.O. No">
+					</div>
+					<div class="col-md-6">
+						<div class="input-group">
+							<div class="input-group-append">
+								<span class="input-group-text">Bill Date</span>
+							</div>
+							<input type="date" formControlName="Date" class="form-control d-inline w-50" name="date" id="date" [ngClass]="{'is-invalid':this.frmConsumer.get('Date').touched && this.frmConsumer.get('Date').invalid}">
+							<span class="help-block text-danger ml-2" *ngIf="this.frmConsumer.get('Date').touched && this.frmConsumer.get('Date').invalid">Bill Date is required</span>
+						</div>
+						<div class="input-group  mt-3">
+							<div class="input-group-append">
+								<span class="input-group-text">D.C. Date</span>
+							</div>
+        					<input type="date" formControlName="DCDate" class="form-control w-50" name="DCdate" id="DCdate">
+						</div>
+						<div class="input-group mt-3">
+							<div class="input-group-append">
+								<span class="input-group-text">P.O. Date</span>
+							</div>
+        					<input type="date" formControlName="PODate" class="form-control w-50" name="POdate" id="POdate">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="card mt-4">
+				<div class="card-header">
+					<h4 class="card-title">Product Details</h4>
+				</div>
+				<div class="card-body">
+					<table class="table">
+						<thead>
+							<tr>
+								<th class="text-center" width="2%">Sr.No.</th>
+								<th class="text-center" width="30%">Description</th>
+								<th class="text-center" width="18%">HSN Code</th>
+								<th class="text-center" width="15%">Sqft./Size</th>
+								<th class="text-center" width="10%">Quantity</th>
+								<th class="text-center" width="10%">Rate Per</th>
+								<th class="text-center" colspan="2" width="15%">Amount</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr formArrayName="products" *ngFor="let product of Controls.controls; let i = index">
+								<ng-container [formGroupName]="i">
+									<td class="text-center">
+									<p>{{i+1}}</p>
+									</td>
+									<td>
+										<input type="text"  class="form-control productList" list="auto" formControlName="ProductName" id="'productName' + i" placeholder="Product Name" (change)="productNameChange($event)" [ngClass]="{'is-invalid': product.get('ProductName').touched && product.get('ProductName').invalid}">
+										<span class="help-block text-danger ml-2" *ngIf="product.get('ProductName').touched && product.get('ProductName').invalid">Product Name is required</span>
+										<datalist id="auto">
+											<option [value]="option" *ngFor="let option of new"></option>
+										</datalist>
+									</td>
+									<td>
+										<input type="text"  class="form-control" formControlName="HSNCode" id="'hsnCode' + i" placeholder="HSN Code">
+									</td>
+									<td>
+										<input type="text"  class="form-control" formControlName="Size" id="'size' + i" placeholder="Sqft./Size">
+									</td>
+									<td>
+										<input type="number" class="form-control" formControlName="Qty" (keyup)="calculateAmount(); SubTotal()" id="'qty' + i" placeholder="Quantity">
+									</td>
+									<td>
+										<input type="number" class="form-control" formControlName="RatePer" (keyup)="calculateAmount(); SubTotal()" id="'rate' + i" placeholder="Rate" [ngClass]="{'is-invalid': product.get('RatePer').touched && product.get('RatePer').invalid}">
+										<span class="help-block text-danger ml-2" *ngIf="product.get('RatePer').touched && product.get('RatePer').invalid">Rate is required</span>
+									</td>
+									<td>
+										<input type="number" class="form-control" formControlName="Amount" id="'amount' + it" placeholder="Amount"  [ngClass]="{'is-invalid': product.get('Amount').touched && product.get('Amount').invalid}" readonly>
+										<span class="help-block text-danger ml-2" *ngIf="product.get('Amount').touched && product.get('Amount').invalid">Amount is required</span>
+									</td>
+									<td>
+										<button type="button" class="exit" (click)="removeProduct(i)">X</button>
+									</td>
+								</ng-container>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="card-footer">
+					<button class="btn btn-primary" type="button" (click)="addMoreProducts()" [disabled]="frmConsumer.get('products').invalid">Add Product</button>
+				</div>
+			</div>
+			<div class="form-group mt-4">
+				<div class="input-group w-25">
+					<label for="subtotal">SubTotal :</label>
+					<input type="number" formControlName="Total" class="form-control ml-2" name="subtotal" id="subtotal" placeholder="SubTotal" [ngClass]="{'is-invalid':this.frmConsumer.get('Total').touched && this.frmConsumer.get('Total').invalid}" readonly>
+					<div class="input-group-append">
+						<span class="input-group-text">&#8377;</span>
+					</div>
+					<span class="help-block text-danger" style="margin-left: 5em;" *ngIf="this.frmConsumer.get('Total').touched && this.frmConsumer.get('Total').invalid">Total amount is required</span>
+				</div>
+				<div class="row mt-3">
+					<div class="col-md-6">
+						<div class="input-group w-50">
+							<label for="cgstp">CGST :</label>
+							<input type="number" formControlName="CGSTP" class="form-control ml-2" (keyup)="calGST()" name="cgstp" id="cgstp" placeholder="CGST in %" [ngClass]="{'is-invalid':this.frmConsumer.get('CGSTP').touched && this.frmConsumer.get('CGSTP').invalid}">
+							<div class="input-group-prepend">
+								<span class="input-group-text">%</span>
+							</div>
+							<span class="help-block text-danger" style="margin-left: 4em;" *ngIf="this.frmConsumer.get('CGSTP').touched && this.frmConsumer.get('CGSTP').invalid">CGST % is required</span>
+						</div>
+						<div class="input-group w-50 mt-3">
+							<label for="number">SGST :</label>
+							<input type="text" formControlName="SGSTP" class="form-control ml-2" (keyup)="calSGST()" name="sgstp" id="sgstp" placeholder="SGST in %" [ngClass]="{'is-invalid':this.frmConsumer.get('SGSTP').touched && this.frmConsumer.get('SGSTP').invalid}">
+							<div class="input-group-prepend">
+								<span class="input-group-text">%</span>
+							</div>
+							<span class="help-block text-danger" style="margin-left: 4em;" *ngIf="this.frmConsumer.get('SGSTP').touched && this.frmConsumer.get('SGSTP').invalid">SGST % is required</span>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="input-group w-75">
+							<label for="cgst">CGST Amount:</label>
+							<div class="input-group-append ml-2">
+								<span class="input-group-text">&#8377;</span>
+							</div>
+							<input type="number" formControlName="CGST" class="form-control" name="cgst" id="cgst" placeholder="CGST Amount" [ngClass]="{'is-invalid':this.frmConsumer.get('CGST').touched && this.frmConsumer.get('CGST').invalid}" readonly>
+							<span class="help-block text-danger" style="margin-left: 10em;" *ngIf="this.frmConsumer.get('CGST').touched && this.frmConsumer.get('CGST').invalid">CGST amount is required</span>
+						</div>
+						<div class="input-group mt-3 w-75">
+							<label for="sgst">SGST Amount:</label>
+							<div class="input-group-append ml-2">
+								<span class="input-group-text">&#8377;</span>
+							</div>
+							<input type="number" formControlName="SGST" class="form-control" name="sgst" id="sgst" placeholder="SGST Amount" [ngClass]="{'is-invalid':this.frmConsumer.get('SGST').touched && this.frmConsumer.get('SGST').invalid}" readonly>
+							<span class="help-block text-danger" style="margin-left: 10em;" *ngIf="this.frmConsumer.get('SGST').touched && this.frmConsumer.get('SGST').invalid">SGST amount is required</span>
+						</div>
+					</div>
+				</div>
+				<div class="input-group w-50 mt-3">
+					<label for="grandtotal">Grand Total :</label>
+					<input type="number" formControlName="GrandTotal" class="form-control ml-2" name="grandtotal" id="grandtotal" placeholder="Grand Total" [ngClass]="{'is-invalid':this.frmConsumer.get('GrandTotal').touched && this.frmConsumer.get('GrandTotal').invalid}" readonly>
+					<div class="input-group-append">
+						<span class="input-group-text">&#8377;</span>
+					</div>
+					<span class="help-block text-danger ml-2" *ngIf="this.frmConsumer.get('GrandTotal').touched && this.frmConsumer.get('GrandTotal').invalid">Grand Total is required</span>
+				</div>
+			</div>
+		</div>
+		<div class="card-footer bg-secondary">
+			<button type="submit" class="btn btn-success" [disabled]="this.frmConsumer.invalid">Save</button>
+			<button type="button" (click)="pathChange()" class="btn btn-danger ml-2">Cancel</button>
+		</div>
+	</form>
+</div>
