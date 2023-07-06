@@ -12,7 +12,7 @@
     </div>
     <div class="container-fluid">
         <div class="text-center">
-            <img src="../../assets/logo.png" height="110px" width="300px" alt="Logo here...">
+            <img src="assets/logo.png" height="110px" width="300px" alt="Logo here...">
         </div>
         <div class="section">
             <div class="card">
@@ -33,6 +33,7 @@
                                 <input type="password" class="form-control" name="txtPassword" ngModel #txtPassword="ngModel" id="password">
                             </div>
                             <span class="help-block text-danger" *ngIf="notValid">UserId and Password does not match</span>
+                            <span class="help-block text-danger" *ngIf="error !== ''">{{error}}</span>
                         </div>
                         <div>
                             <button type="submit" class="btn btn-success">Login</button>
