@@ -19,6 +19,7 @@ import { MenuComponent } from './menu/menu.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatAutocomplete, MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { ElectronService } from 'ngx-electron';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatAutocompleteModule,
     MatFormFieldModule
   ],
-  providers: [DataService, ConsumerDataService, DatePipe, BillService, LoginService, AuthGuard],
+  providers: [DataService, ConsumerDataService, DatePipe, BillService, LoginService, AuthGuard, ElectronService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
