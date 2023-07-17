@@ -1,5 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormArray, Validators, Form, NgForm, FormControl } from '@angular/forms';
+import {
+  FormBuilder,
+  FormArray,
+  Validators,
+  Form,
+  NgForm,
+  FormControl,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
@@ -14,10 +21,12 @@ import { IProduct } from '../IProduct';
   styleUrls: ['./new_invoice.css'],
 })
 export class FormComponent implements OnInit {
-
-  constructor(private fb: FormBuilder, private route: Router,
-              private routes: ActivatedRoute,
-              private billService: BillService) { }
+  constructor(
+    private fb: FormBuilder,
+    private route: Router,
+    private routes: ActivatedRoute,
+    private billService: BillService
+  ) {}
 
   public amount: number[] = [];
   public title: string;
@@ -27,13 +36,13 @@ export class FormComponent implements OnInit {
   public consumer: IBill[];
   //tslint:disable
   ngOnInit(): void {
-    this.routes.paramMap.subscribe(params => {
-      const billId = +params.get('id')
+    this.routes.paramMap.subscribe((params) => {
+      const billId = +params.get('id');
       if (billId) {
-        this.title = "Edit Invoice"
+        this.title = 'Edit Invoice';
         this.getBillById(billId);
       } else {
-        this.title = "Create Invoice"
+        this.title = 'Create Invoice';
         this.bill = {
           id: null,
           ConsumerName: '',
@@ -52,52 +61,55 @@ export class FormComponent implements OnInit {
           CGST: null,
           SGST: null,
           GrandTotal: null,
-        }
+        };
       }
     });
-    this.billService.getBillList().subscribe(
-      (res) => this.copyOptions(res),
-      (err) => console.log(err)
-    )
-    this.billService.getBillList().subscribe(
-      (res) => this.copyProductOptions(res),
-      (err) => console.log(err)
-    )
-    this.filteredOptions = this.mycontrol.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => this._filter(value))
-      );
-    this.frmConsumer.get('Name').valueChanges.subscribe(
-      (value) => this.consumerNameChange(value)
-    )
+    this.billService
+      .getBillList()
+      .then((res) => this.copyOptions(res))
+      .catch((err) => console.log(err));
+    this.billService
+      .getBillList()
+      .then((res) => this.copyProductOptions(res))
+      .catch((err) => console.log(err));
+    this.filteredOptions = this.mycontrol.valueChanges.pipe(
+      startWith(''),
+      map((value) => this._filter(value))
+    );
+    this.frmConsumer
+      .get('Name')
+      .valueChanges.subscribe((value) => this.consumerNameChange(value));
   }
   copyOptions(data: IBill[]) {
     this.consumer = data;
-    for(let i=0; i<data.length; i++) {
+    for (let i = 0; i < data.length; i++) {
       this.options[i] = data[i].ConsumerName;
     }
     this.consumerOptions = Array.from(new Set(this.options));
   }
 
   copyProductOptions(data: IBill[]) {
-    data.forEach(a => a.Products.forEach(b => this.productOptions.push(b.ProductName)));
+    data.forEach((a) =>
+      a.Products.forEach((b) => this.productOptions.push(b.ProductName))
+    );
     this.new = Array.from(new Set(this.productOptions));
   }
 
-  private _filter(value: string):string[] {
+  private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
-    return this.consumerOptions.filter(option => option.toLowerCase().includes(filterValue))
-  } 
+    return this.consumerOptions.filter((option) =>
+      option.toLowerCase().includes(filterValue)
+    );
+  }
 
   getBillById(id: number) {
-    this.billService.getBill(id).subscribe(
-      (res: IBill) => {
-        this.editBill(res)
+    this.billService
+      .getBill(id)
+      .then((res: IBill) => {
+        this.editBill(res);
         this.bill = res;
-      },
-      (err) => console.log(err)
-    )
+      })
+      .catch((err) => console.log(err));
   }
 
   editBill(data: IBill) {
@@ -117,20 +129,25 @@ export class FormComponent implements OnInit {
     this.frmConsumer.get('SGST').patchValue(data.SGST);
     this.frmConsumer.get('GrandTotal').patchValue(data.GrandTotal);
 
-    this.frmConsumer.setControl('products', this.setExistingProducts(data.Products));
+    this.frmConsumer.setControl(
+      'products',
+      this.setExistingProducts(data.Products)
+    );
   }
 
   setExistingProducts(ProductSet: IProduct[]): FormArray {
     const formArray = new FormArray([]);
-    ProductSet.forEach(s => {
-      formArray.push(this.fb.group({
-        ProductName: s.ProductName,
-        HSNCode: s.HSNCode,
-        Size: s.Size,
-        Qty: s.Qty,
-        RatePer: s.RatePer,
-        Amount: s.Amount
-      }));
+    ProductSet.forEach((s) => {
+      formArray.push(
+        this.fb.group({
+          ProductName: s.ProductName,
+          HSNCode: s.HSNCode,
+          Size: s.Size,
+          Qty: s.Qty,
+          RatePer: s.RatePer,
+          Amount: s.Amount,
+        })
+      );
     });
     return formArray;
   }
@@ -138,23 +155,21 @@ export class FormComponent implements OnInit {
   public frmConsumer = this.fb.group({
     Name: ['', Validators.required],
     City: ['', Validators.required],
-    GSTNo:[''],
+    GSTNo: [''],
     Billno: ['', Validators.required],
     Date: ['', Validators.required],
     DCno: [''],
     DCDate: [''],
     POno: [''],
     PODate: [''],
-    products: this.fb.array([
-      this.addProduct()
-    ]),
+    products: this.fb.array([this.addProduct()]),
     Total: ['', Validators.required],
     CGSTP: ['', Validators.required],
     SGSTP: ['', Validators.required],
     CGST: ['', Validators.required],
     SGST: ['', Validators.required],
-    GrandTotal: ['', Validators.required]
-  })
+    GrandTotal: ['', Validators.required],
+  });
 
   mycontrol = this.frmConsumer.get('Name');
   options: string[] = [];
@@ -168,15 +183,15 @@ export class FormComponent implements OnInit {
       Size: [''],
       Qty: [''],
       RatePer: ['', Validators.required],
-      Amount: ['', Validators.required]
-    })
+      Amount: ['', Validators.required],
+    });
   }
 
   get Controls() {
     return <FormArray>this.frmConsumer.get('products');
   }
   public addMoreProducts() {
-    (<FormArray>this.frmConsumer.get('products')).push(this.addProduct())
+    (<FormArray>this.frmConsumer.get('products')).push(this.addProduct());
   }
   public removeProduct(index) {
     this.Controls.removeAt(index);
@@ -184,15 +199,20 @@ export class FormComponent implements OnInit {
 
   consumerNameChange(value) {
     let name = value.toLowerCase();
-    let bill = this.consumer.find(data => data.ConsumerName.toLowerCase().includes(name));
+    let bill = this.consumer.find((data) =>
+      data.ConsumerName.toLowerCase().includes(name)
+    );
     console.log(bill);
     if (bill.ConsumerName !== undefined && bill.ConsumerName === value) {
-      let City = bill.ConsumerCity
+      let City = bill.ConsumerCity;
       let GSTno = bill.ConsumerGST;
       this.frmConsumer.get('City').patchValue(City);
       this.frmConsumer.get('GSTNo').patchValue(GSTno);
-    } else if(bill.ConsumerName !== undefined && bill.ConsumerName.toLowerCase() === value) {
-      let City = bill.ConsumerCity
+    } else if (
+      bill.ConsumerName !== undefined &&
+      bill.ConsumerName.toLowerCase() === value
+    ) {
+      let City = bill.ConsumerCity;
       let GSTno = bill.ConsumerGST;
       this.frmConsumer.get('City').patchValue(City);
       this.frmConsumer.get('GSTNo').patchValue(GSTno);
@@ -206,17 +226,26 @@ export class FormComponent implements OnInit {
 
   productNameChange(event) {
     let name = event.target.value.toLowerCase();
-    let bill = this.consumer.find(data => data.Products.find(prod => prod.ProductName.toLowerCase() === name));
-    let product = bill.Products.find(data => data.ProductName === event.target.value);
+    let bill = this.consumer.find((data) =>
+      data.Products.find((prod) => prod.ProductName.toLowerCase() === name)
+    );
+    let product = bill.Products.find(
+      (data) => data.ProductName === event.target.value
+    );
     let length = this.Controls.length;
-    if (product.ProductName !== undefined && product.ProductName === event.target.value) {
+    if (
+      product.ProductName !== undefined &&
+      product.ProductName === event.target.value
+    ) {
       let HSNCode = product.HSNCode;
-      this.Controls.at(length-1).get('HSNCode').patchValue(HSNCode);
+      this.Controls.at(length - 1)
+        .get('HSNCode')
+        .patchValue(HSNCode);
     } else {
-      console.log('nothing')
+      console.log('nothing');
     }
   }
-  
+
   public calAmount;
   public sum;
   public subAmount;
@@ -224,13 +253,13 @@ export class FormComponent implements OnInit {
   public calculateAmount() {
     const formArray = this.frmConsumer.get('products').value;
     const control = this.frmConsumer.get('products') as FormArray;
-    for (let i = 0; i<formArray.length; i++) {
-      if(formArray[i].Qty){
-        this.calAmount = (formArray[i].Qty) * (formArray[i].RatePer);
+    for (let i = 0; i < formArray.length; i++) {
+      if (formArray[i].Qty) {
+        this.calAmount = formArray[i].Qty * formArray[i].RatePer;
         this.amount[i] = this.calAmount;
         this.Controls.at(i).get('Amount').setValue(this.calAmount);
       } else {
-        this.calAmount = (formArray[i].Size) * (formArray[i].RatePer);
+        this.calAmount = formArray[i].Size * formArray[i].RatePer;
         this.amount[i] = this.calAmount;
         this.Controls.at(i).get('Amount').setValue(this.calAmount);
       }
@@ -240,7 +269,7 @@ export class FormComponent implements OnInit {
   public SubTotal() {
     this.subAmount = 0;
     this.sum = 0;
-    for(let value of this.amount) {
+    for (let value of this.amount) {
       this.subAmount = this.sum + value;
       this.sum = this.subAmount;
     }
@@ -255,11 +284,11 @@ export class FormComponent implements OnInit {
 
   public calGST() {
     const per = this.frmConsumer.get('CGSTP').value;
-    if (per){
-      this.cgstAmount = this.subAmount*(per/100);
+    if (per) {
+      this.cgstAmount = this.subAmount * (per / 100);
       this.cgstAmount = +this.cgstAmount.toFixed(2);
       this.frmConsumer.get('CGST').setValue(this.cgstAmount);
-      this.grandAmount = (+this.subAmount) + (+this.cgstAmount) + (+this.sgstAmount);
+      this.grandAmount = +this.subAmount + +this.cgstAmount + +this.sgstAmount;
       this.grandAmount = +Math.round(this.grandAmount.toFixed(2));
       this.frmConsumer.get('GrandTotal').setValue(this.grandAmount);
     }
@@ -270,10 +299,10 @@ export class FormComponent implements OnInit {
   public calSGST() {
     const per = this.frmConsumer.get('SGSTP').value;
     if (per) {
-      this.sgstAmount = this.subAmount*(per/100);
+      this.sgstAmount = this.subAmount * (per / 100);
       this.sgstAmount = +this.sgstAmount.toFixed(2);
       this.frmConsumer.get('SGST').setValue(this.sgstAmount);
-      this.grandAmount = (+this.subAmount) + (+this.cgstAmount) + (+this.sgstAmount);
+      this.grandAmount = +this.subAmount + +this.cgstAmount + +this.sgstAmount;
       this.grandAmount = +Math.round(this.grandAmount.toFixed(2));
       this.frmConsumer.get('GrandTotal').setValue(this.grandAmount);
     }
@@ -282,15 +311,15 @@ export class FormComponent implements OnInit {
   public onSubmit() {
     this.MapFormValuesToBillModel();
     if (this.bill.id) {
-      this.billService.updateBill(this.bill).subscribe(
-        () => this.route.navigate(['print', this.bill.BillNo]),
-        (err) => console.log(err)
-      );
+      this.billService
+        .updateBill(this.bill)
+        .then(() => this.route.navigate(['print', this.bill.BillNo]))
+        .catch((err) => console.log(err));
     } else {
-        this.billService.addBill(this.bill).subscribe(
-          () => this.route.navigate(['print', this.bill.BillNo]),
-          (err) => console.log(err)
-        );
+      this.billService
+        .addBill(this.bill)
+        .then(() => this.route.navigate(['print', this.bill.BillNo]))
+        .catch((err) => console.log(err));
     }
   }
 
@@ -314,14 +343,15 @@ export class FormComponent implements OnInit {
   }
 
   public pathChange() {
-    if(this.frmConsumer.dirty) {
-      let locate = confirm("Are you sure to leave this page? All information will be discarded");
-      if(locate == true){
+    if (this.frmConsumer.dirty) {
+      let locate = confirm(
+        'Are you sure to leave this page? All information will be discarded'
+      );
+      if (locate == true) {
         this.route.navigate(['/billing']);
       }
     } else {
       this.route.navigate(['/billing']);
     }
   }
-  
 }

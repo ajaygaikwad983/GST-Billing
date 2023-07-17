@@ -15,10 +15,10 @@ export class BillListComponent implements OnInit {
 
   public Records: IBill[];
   ngOnInit(): void {
-    this.billService.getBillList().subscribe(
-      (listBill) => (this.Records = listBill),
-      (err) => (this.error = err)
-    );
+    this.billService
+      .getBillList()
+      .then((listBill) => (this.Records = listBill))
+      .catch((err) => (this.error = err));
   }
 
   addBillClick(): void {
@@ -39,13 +39,13 @@ export class BillListComponent implements OnInit {
 
   deleteBill(id: number) {
     if (confirm('Are you sure want to delete this bill')) {
-      this.billService.deleteBill(id).subscribe(
-        () => {
+      this.billService
+        .deleteBill(id)
+        .then(() => {
           console.log(`bill with ID ${id} is deleted`);
           this.ngOnInit();
-        },
-        (err) => (this.error = err)
-      );
+        })
+        .catch((err) => (this.error = err));
     }
   }
 }

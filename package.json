@@ -52,6 +52,7 @@
     "bootstrap": "^4.5.2",
     "dom-to-image": "^2.6.0",
     "electron-log": "^4.4.8",
+    "electron-store": "^8.1.0",
     "file-saver": "^2.0.2",
     "html2canvas": "^1.0.0-rc.7",
     "jquery": "^3.5.1",

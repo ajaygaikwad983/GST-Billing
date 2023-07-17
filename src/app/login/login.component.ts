@@ -18,8 +18,9 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {}
 
   onSubmit(form) {
-    this.loginService.getUser().subscribe(
-      (listBill) => {
+    this.loginService
+      .getUser()
+      .then((listBill) => {
         this.error = '';
         if (
           listBill[0].name === form.txtUser &&
@@ -30,8 +31,11 @@ export class LoginComponent implements OnInit {
         } else {
           this.notValid = true;
         }
-      },
-      (err) => (this.error = err)
-    );
+      })
+      .catch(
+        (err) =>
+          (this.error =
+            err)
+      );
   }
 }

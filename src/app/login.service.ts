@@ -10,10 +10,11 @@ export class LoginService {
 
   url = 'http://localhost:3000/user';
 
-  public getUser(): Observable<any> {
-    return this.httpClient
-      .get<any>(this.url)
-      .pipe(catchError(this.handleError));
+  public getUser() {
+    const listOfUser = JSON.parse(localStorage.getItem('data'));
+    return listOfUser.user.length
+      ? Promise.resolve(listOfUser.user)
+      : Promise.reject("There is problem with the service. Please try again later.");
   }
 
   private handleError(errorResponse: HttpErrorResponse) {
