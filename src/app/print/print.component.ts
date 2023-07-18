@@ -8,6 +8,7 @@ import { DatePipe } from '@angular/common';
 import { BillService } from '../bill.service';
 import { IBill } from '../IBill';
 import { environment } from 'src/environments/environment';
+import { ElectronService } from 'ngx-electron';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -21,7 +22,8 @@ export class PrintComponent implements OnInit {
     private datepipe: DatePipe,
     private route: ActivatedRoute,
     private billService: BillService,
-    private routes: Router
+    private routes: Router,
+	private ElectronService: ElectronService
   ) {}
 
   public consumer: IBill[];
@@ -226,7 +228,7 @@ export class PrintComponent implements OnInit {
               [
                 {
                   image: environment.logo,
-                  width: 180,
+                  width: 170,
                   alignment: 'center',
                   margin: [10, 10, 10, 10],
                 },
@@ -235,10 +237,10 @@ export class PrintComponent implements OnInit {
                   style: 'bold',
                   margin: [20, 22, 30, 10],
                   ol: [
-                    'Address of the company',
-                    'City',
-                    'Tel. : 1234567890, 0123456789',
-                    'E-mail : test@gmail.com',
+                    '"Ambika Nivas" Near Gaonkari press,',
+                    'Khokadpura, Aurangabad.',
+                    'Mob. No. : 9823327590',
+                    'E-mail : newomsai929@gmail.com',
                   ],
                 },
               ],
@@ -254,7 +256,7 @@ export class PrintComponent implements OnInit {
               ],
               [
                 {
-                  text: `To, \n ${this.consumer[0].ConsumerName}\n${this.consumer[0].ConsumerCity}\n\nGSTN ${this.consumer[0].ConsumerGST}`,
+                  text: `To, \n ${this.consumer[0].ConsumerName}\n${this.consumer[0].ConsumerCity}\n\nGSTN : ${this.consumer[0].ConsumerGST}`,
                   bold: true,
                   margin: 10,
                 },
@@ -391,22 +393,22 @@ export class PrintComponent implements OnInit {
                             {
                               text: 'Bank Details\n',
                               bold: true,
-                              fontSize: 13,
+                              fontSize: 12,
                             },
-                            { text: 'Bank Name   : **** ****\n', bold: true },
+                            { text: 'Bank Name   : DNS Bank\n', bold: true },
                             { text: 'Branch           : ', bold: true },
-                            { text: '*** *** ***\n', bold: true, fontSize: 9 },
-                            { text: 'A/C. No.        : ***\n', bold: true },
-                            { text: 'IFSC Code     : ***', bold: true },
+                            { text: 'Samarth Nagar\n', bold: true, fontSize: 9 },
+                            { text: 'A/C. No.        : 063011101886546\n', bold: true },
+                            { text: 'IFSC Code     : DNSB0000063', bold: true },
                           ],
                           bold: true,
                           margin: [5, 5, 5, 5],
                           border: [false, false, true, false],
-                          fontSize: 10,
+                          fontSize: 9,
                         },
                         {
-                          text: 'GSTN ************',
-                          fontSize: 13,
+                          text: 'GSTN: 27APYPG1530J1ZM',
+                          fontSize: 12,
                           alignment: 'center',
                           bold: true,
                           margin: [10, 20, 20, 20],
@@ -414,7 +416,7 @@ export class PrintComponent implements OnInit {
                         },
                         {
                           image: environment.img,
-                          width: 90,
+                          width: 100,
                           margin: [70, 30, 0, 0],
                           border: [true, false, false, false],
                         },

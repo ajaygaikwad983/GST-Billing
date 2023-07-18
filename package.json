@@ -24,7 +24,7 @@
     "copyright": "Copyright © 2020 Om Sai Lamination",
     "win": {
       "requestedExecutionLevel": "requireAdministrator",
-      "icon": "assets/logo.png"
+      "icon": "app-logo.png"
     },
     "files": [
       "dist/**/*",
@@ -35,6 +35,7 @@
       "buildResources": "assets",
       "output": "build"
     },
+    "asar": false,
     "extends": null
   },
   "dependencies": {

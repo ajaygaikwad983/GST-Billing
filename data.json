@@ -1,47 +1,6 @@
 {
-  "bills": [
-    {
-      "id": 1,
-      "ConsumerName": "Test pvt. ltd.",
-      "ConsumerCity": "Aurangabad",
-      "ConsumerGST": "123456",
-      "BillNo": 1,
-      "BillNoDate": "2020-10-05",
-      "DCNo": "DC123",
-      "DCDate": "2020-10-05",
-      "PONo": "PO123",
-      "PODate": "2020-10-05",
-      "Products": [
-        {
-          "ProductName": "Test Product",
-          "HSNCode": "HSN 123",
-          "Size": "1000 ft",
-          "Qty": 1000,
-          "RatePer": 25,
-          "Amount": 25000
-        },
-        {
-          "ProductName": "Test Product 2",
-          "HSNCode": "HSN 456",
-          "Size": "500",
-          "Qty": 500,
-          "RatePer": 100,
-          "Amount": 50000
-        }
-      ],
-      "Total": 75000,
-      "CGSTP": 9,
-      "SGSTP": 9,
-      "CGST": 6750,
-      "SGST": 6750,
-      "GrandTotal": 88500
-    }
-  ],
+  "bills": [],
   "user": [
-    {
-      "id": 1,
-      "name": "test@gmail.com",
-      "password": "testpassword"
-    }
+    { "id": 1, "name": "omsailamination@gmail.com", "password": "rajugadesir" }
   ]
 }

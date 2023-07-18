@@ -44,7 +44,7 @@ function createWindow() {
   console.log("data file path", dataFilePath);
 
   const readDataFile = () => {
-    let rawdata = fs.readFileSync("data.json");
+    let rawdata = fs.readFileSync(dataFilePath);
     try {
       const data = JSON.parse(rawdata);
       mainWindow.webContents.send("databaseData", data);
@@ -63,14 +63,18 @@ function createWindow() {
 
   ipcMain.on("changeInStore", (event, data) => {
     console.log("save data in electron store");
+    logger.info("save data in electron store", data);
     store.set("data", JSON.stringify(data));
   });
 }
 
 const writeDataFile = () => {
-  const storeData = store.get("data");
-  let rawdata = fs.writeFileSync("data.json", storeData);
   try {
+    const dataFilePath = path.join(__dirname, `./data.json`);
+    const storeData = store.get("data");
+    console.log("store data", storeData);
+    logger.info("store data", storeData);
+    let rawdata = fs.writeFileSync(dataFilePath, storeData);
     console.log("write file response", rawdata);
     logger.info("write file response", rawdata);
     app.quit();

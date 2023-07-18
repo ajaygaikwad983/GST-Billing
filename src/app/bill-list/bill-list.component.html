@@ -27,6 +27,9 @@
         <td width="10%"><button class="btn btn-primary" type="button" (click)="editBill(list.id)">Edit</button></td>
         <td widht="10%"><button class="btn btn-danger" type="button" (click)="deleteBill(list.id)">Delete</button></td>
       </tr>
+      <tr *ngIf="!Records.length">
+        <td colspan="7" class="text-center">No records found</td>
+      </tr>
     </tbody>
   </table>
 </div>
